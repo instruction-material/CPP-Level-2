@@ -4,6 +4,7 @@ This repo now holds the lower-level follow-on course that used to be mixed into
 `CPP-Level-1`.
 
 Core flow:
+- `CPPM0` lifetime, references, and ownership framing
 - `CPPM1` pointers and memory addresses
 - `CPPM2` raw arrays and pointer arithmetic
 - `CPPM3` two-dimensional arrays and array layout

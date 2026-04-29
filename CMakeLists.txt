@@ -31,3 +31,15 @@ add_executable(CPP_Level_2
 #        CPPM5-Profile-Posts/main.cpp
 #        CPPM5-Profile-Posts/profile.cpp
 )
+
+add_executable(CPPM0_Lifetime_Tracing_Warm_Up
+        CPPM0-Lifetime-Tracing-Warm-Up/main.cpp
+)
+
+add_executable(CPPM0_Ownership_Boundary_Debugging
+        CPPM0-Ownership-Boundary-Debugging/main.cpp
+)
+
+add_executable(CPPM5_Modern_Ownership_Reflection
+        CPPM5-Modern-Ownership-Reflection/main.cpp
+)

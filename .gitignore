@@ -1,5 +1,6 @@
 /.DS_Store
 /.idea/
+/build/
 ### VisualStudioCode template
 .vscode/*
 !.vscode/settings.json

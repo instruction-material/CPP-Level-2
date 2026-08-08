@@ -7,7 +7,7 @@ class GroceryList {
   private:
     // Dynamic array that will hold our groceries in a private variable
     DynamicArray groceries;
-  
+
   public:
     // Constructor that simply initializes the array
     GroceryList();

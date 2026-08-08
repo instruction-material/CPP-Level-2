@@ -13,7 +13,7 @@ class Matrix {
     std::vector<std::vector<int>> mat;
 
     int matNum;
-    
+
   public:
     Matrix(int r, int c);
 
@@ -30,7 +30,6 @@ class Matrix {
     Matrix multiply(const Matrix& other) const;
 
     void display() const;
-
 };
 
 #endif // MATRIX_H

@@ -5,8 +5,8 @@
 #include <string>
 
 struct Post {
-  std::string caption;
-  int hearts;
+    std::string caption;
+    int hearts;
 };
 
 constexpr size_t DEFAULT_SIZE = 5;
@@ -14,9 +14,9 @@ constexpr size_t DEFAULT_SIZE = 5;
 class Profile {
 
   private:
-    size_t mySize; // this keeps track of our current size
+    size_t mySize;  // this keeps track of our current size
     size_t maxSize; // this is the capacity of our array
-    Post *myPosts; // keeps track of the values in an array of strings
+    Post* myPosts;  // keeps track of the values in an array of strings
 
     // helper function to check if an index is valid or not
     bool validPostIndex(size_t index) const;
@@ -44,7 +44,7 @@ class Profile {
     int sumHearts() const;
 
     // fills all empty slots in the array with the last entry until we have filled our current capacity.
-    void fillProfile(); 
+    void fillProfile();
 
     // removes a post at a certain index
     void removePost(size_t index);

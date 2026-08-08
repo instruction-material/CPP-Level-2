@@ -8,9 +8,9 @@ constexpr size_t DEFAULT_SIZE = 5;
 class DynamicArray {
 
   private:
-    size_t mySize; // this keeps track of our current size
+    size_t mySize;  // this keeps track of our current size
     size_t maxSize; // this is the capacity of our array
-    int *myVals; // keeps track of the values in an int array
+    int* myVals;    // keeps track of the values in an int array
 
     void resize(size_t newCapacity);
 
@@ -30,7 +30,6 @@ class DynamicArray {
 
     // access and prints out a specific value at an index, given that it's within our current bounds
     int get(size_t index) const;
-
 };
 
 #endif // DYNAMICARRAY_H

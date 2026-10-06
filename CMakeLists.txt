@@ -164,3 +164,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
         target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endforeach()
 endif()
+
+# The ownership reflection is a worked comparison, with strict C++20 compilation.
+set_target_properties(CPPM5_Modern_Ownership_Reflection PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+    target_compile_options(CPPM5_Modern_Ownership_Reflection PRIVATE -Wall -Wextra -Wpedantic -Werror)
+endif()

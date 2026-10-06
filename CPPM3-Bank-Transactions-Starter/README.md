@@ -64,8 +64,8 @@ complete, there is no ledger prefix to print. No uninitialized row is printed.
 
 Draw the four-by-five schema and predict a deposit, withdrawal and unchanged
 balance. Attempt one task, run it, then trace the prior-ending to next-opening
-link. An instructor can first identify a column, next identify the committed
-row count, then ask which checks must happen before a write. Keep reference
+link. A column map, a committed-row count and a check-before-write trace support
+independent work or an instructor walkthrough. Keep reference
 reflection until after the attempt.
 
 | Case | Required result |

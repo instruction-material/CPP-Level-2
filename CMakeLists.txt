@@ -109,3 +109,14 @@ set_target_properties(CPPM4_Dynamic_Variables PROPERTIES CXX_STANDARD 20 CXX_STA
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
     target_compile_options(CPPM4_Dynamic_Variables PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
+
+# CPPM4 integer-array learner/reference keep independent entry points and owners.
+add_executable(CPPM4_Dynamic_Array_Starter CPPM4-Dynamic-Array-Implementation-Starter/DynamicArray.cpp CPPM4-Dynamic-Array-Implementation-Starter/main.cpp)
+add_executable(CPPM4_Dynamic_Array_Reference CPPM4-Dynamic-Array-Implementation/DynamicArray.cpp CPPM4-Dynamic-Array-Implementation/main.cpp)
+set(CPPM4_ARRAY_TARGETS CPPM4_Dynamic_Array_Starter CPPM4_Dynamic_Array_Reference)
+set_target_properties(${CPPM4_ARRAY_TARGETS} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+    foreach(target IN LISTS CPPM4_ARRAY_TARGETS)
+        target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endforeach()
+endif()

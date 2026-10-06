@@ -1,14 +1,21 @@
-#include <iostream>
 #include "DynamicArray.h"
 
-int main() {
-    DynamicArray myArray;
-    std::cout << std::endl;
-    for (int i = 1; i <= 81; ++i) {
-        myArray.addVal(i);
-        std::cout << "Adding " << i << std::endl;
-    }
+#include <exception>
+#include <iostream>
 
-    std::cout << "\nArray: " << std::endl;
-    myArray.printVals();
+int main() {
+    try {
+        DynamicArray myArray;
+        std::cout << '\n';
+        for (int i = 1; i <= 81; ++i) {
+            myArray.addVal(i);
+            std::cout << "Adding " << i << '\n';
+        }
+        std::cout << "\nArray: \n";
+        myArray.printVals();
+    } catch (const std::exception& error) {
+        std::cerr << "Dynamic array demonstration failed: " << error.what() << '\n';
+        return 1;
+    }
+    return 0;
 }

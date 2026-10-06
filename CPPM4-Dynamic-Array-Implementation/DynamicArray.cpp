@@ -1,15 +1,34 @@
 #include "DynamicArray.h"
-#include <iostream>
 
-// our default constructor
-DynamicArray::DynamicArray()
-    : mySize(0), maxSize(DEFAULT_SIZE), myVals(new int[DEFAULT_SIZE]) {
+#include <iostream>
+#include <limits>
+#include <stdexcept>
+
+namespace cppm4_array_detail {
+// This arithmetic bound does not promise that the machine has this much memory.
+constexpr std::size_t maxElements =
+    std::numeric_limits<std::size_t>::max() / sizeof(int);
+
+std::size_t nextCapacity(const std::size_t current) {
+    if (current >= maxElements) {
+        throw std::length_error("DynamicArray capacity cannot grow");
+    }
+    if (current == 0) {
+        return DEFAULT_SIZE;
+    }
+    // Clamp before multiplying, so doubling cannot wrap or exceed the byte bound.
+    return current > maxElements / 2 ? maxElements : current * 2;
 }
+} // namespace cppm4_array_detail
+
+DynamicArray::DynamicArray()
+    : mySize(0), maxSize(DEFAULT_SIZE), myVals(new int[DEFAULT_SIZE]) {}
 
 DynamicArray::DynamicArray(const DynamicArray& other)
     : mySize(other.mySize), maxSize(other.maxSize),
-      myVals(new int[other.maxSize]) {
-    for (size_t i = 0; i < mySize; ++i) {
+      myVals(other.maxSize == 0 ? nullptr : new int[other.maxSize]) {
+    // Copy only initialized elements; int assignment cannot throw.
+    for (std::size_t i = 0; i < mySize; ++i) {
         myVals[i] = other.myVals[i];
     }
 }
@@ -18,12 +37,11 @@ DynamicArray& DynamicArray::operator=(const DynamicArray& other) {
     if (this == &other) {
         return *this;
     }
-
-    int* newVals = new int[other.maxSize];
-    for (size_t i = 0; i < other.mySize; ++i) {
+    // Allocate and copy before releasing the existing owner.
+    int* newVals = other.maxSize == 0 ? nullptr : new int[other.maxSize];
+    for (std::size_t i = 0; i < other.mySize; ++i) {
         newVals[i] = other.myVals[i];
     }
-
     delete[] myVals;
     myVals = newVals;
     mySize = other.mySize;
@@ -42,58 +60,52 @@ DynamicArray& DynamicArray::operator=(DynamicArray&& other) noexcept {
     if (this == &other) {
         return *this;
     }
-
     delete[] myVals;
     myVals = other.myVals;
     mySize = other.mySize;
     maxSize = other.maxSize;
-
     other.mySize = 0;
     other.maxSize = 0;
     other.myVals = nullptr;
     return *this;
 }
 
-// our destructor
 DynamicArray::~DynamicArray() {
     delete[] myVals;
 }
 
-void DynamicArray::resize(size_t newCapacity) {
+void DynamicArray::resize(const std::size_t newCapacity) {
+    if (newCapacity == 0 || newCapacity < mySize ||
+        newCapacity > cppm4_array_detail::maxElements) {
+        throw std::length_error("DynamicArray capacity is outside its storage bound");
+    }
     int* newVals = new int[newCapacity];
-    for (size_t i = 0; i < mySize; ++i) {
+    for (std::size_t i = 0; i < mySize; ++i) {
         newVals[i] = myVals[i];
     }
-
     delete[] myVals;
     myVals = newVals;
     maxSize = newCapacity;
 }
 
-// adds a value to the next available spot in the array
-void DynamicArray::addVal(int val) {
-    // doubles in size, dynamically, if we're out of space. creates a new array and swaps the values
+void DynamicArray::addVal(const int val) {
     if (mySize == maxSize) {
-        resize(maxSize * 2);
+        resize(cppm4_array_detail::nextCapacity(maxSize));
     }
     myVals[mySize] = val;
     ++mySize;
 }
 
-// print out all the values that we are holding on to right now
 void DynamicArray::printVals() const {
-    for (size_t i = 0; i < mySize; ++i) {
+    for (std::size_t i = 0; i < mySize; ++i) {
         std::cout << myVals[i] << " ";
     }
-    std::cout << std::endl;
+    std::cout << '\n';
 }
 
-// access and prints out a specific value at an index, given that it's within our current bounds
-int DynamicArray::get(size_t index) const {
-    if (index < mySize) {
-        return myVals[index];
-    } else {
-        std::cout << "Error! This was not a valid index." << std::endl;
-        return -1;
+int DynamicArray::get(const std::size_t index) const {
+    if (index >= mySize) {
+        throw std::out_of_range("DynamicArray index is outside its logical size");
     }
+    return myVals[index];
 }

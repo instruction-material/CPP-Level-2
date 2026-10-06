@@ -102,3 +102,10 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
     target_compile_options(CPPM3_Extension_Starter PRIVATE -Wall -Wextra -Wpedantic -Werror)
     target_compile_options(CPPM3_Extension_Reference PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
+
+# Complete CPPM4 lifetime lesson: independent, warning-clean C++20 target.
+add_executable(CPPM4_Dynamic_Variables CPPM4-Dynamic-Variables-Reference/main.cpp)
+set_target_properties(CPPM4_Dynamic_Variables PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+    target_compile_options(CPPM4_Dynamic_Variables PRIVATE -Wall -Wextra -Wpedantic -Werror)
+endif()

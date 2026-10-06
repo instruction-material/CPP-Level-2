@@ -43,4 +43,12 @@ Canonical source repository: `CPP-Level-2`
 - Top-level folders: 21
 - Active linked folders: 21
 - Ledgered inactive/support folders: 0
-- Source-like files: 35
+- Source-like files: 38
+
+## Scoped source review
+
+`CPPM1-Pointers` now has a warning-clean C++20 observation reference and a
+complete native-workflow brief. Its paired original question starter is
+unchanged. Strict compilation, address/value traces, both Make targets and
+sanitizer checks cover that one lesson; the inventory gate alone does not
+certify every linked project or the broader course audit.

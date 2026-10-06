@@ -1,15 +1,10 @@
-all: main
-
 CXX = clang++
-override CXXFLAGS += -g -Wno-everything
-
-SRCS = $(shell find . -name '.ccls-cache' -type d -prune -o -type f -name '*.cpp' -print | sed -e 's/ /\\ /g')
-
-main: $(SRCS)
-	$(CXX) $(CXXFLAGS) $(SRCS) -o "$@"
-
-main-debug: $(SRCS)
-	$(CXX) $(CXXFLAGS) -O0 $(SRCS) -o "$@"
-
+override CXXFLAGS += -std=c++20 -Wall -Wextra -Wpedantic -Werror
+.PHONY: all clean
+all: main
+main: main.cpp
+	$(CXX) $(CXXFLAGS) main.cpp -o "$@"
+main-debug: main.cpp
+	$(CXX) $(CXXFLAGS) -g -O0 -fsanitize=address,undefined -fno-sanitize-recover=all main.cpp -o "$@"
 clean:
-	rm -f main main-debug
+	rm -rf main main-debug main.dSYM main-debug.dSYM

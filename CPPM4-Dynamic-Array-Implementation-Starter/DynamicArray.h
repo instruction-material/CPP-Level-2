@@ -7,25 +7,21 @@ constexpr std::size_t DEFAULT_SIZE = 5;
 
 class DynamicArray {
 private:
-    std::size_t mySize;  // Number of initialized elements.
-    std::size_t maxSize; // Allocated capacity, separate from logical size.
-    int* myVals;        // Sole owner of this array; nullptr at zero capacity.
-
+    std::size_t mySize;
+    std::size_t maxSize;
+    int* myVals;
     void resize(std::size_t newCapacity);
 
 public:
     DynamicArray();
+    // TODO: define independent copying and allocation-free, noexcept moving.
     DynamicArray(const DynamicArray& other);
     DynamicArray& operator=(const DynamicArray& other);
     DynamicArray(DynamicArray&& other) noexcept;
     DynamicArray& operator=(DynamicArray&& other) noexcept;
     ~DynamicArray();
-
-    // Append without changing existing values. Allocation failure preserves them.
     void addVal(int val);
-    // Print logical elements only, followed by one newline. Empty prints a newline.
     void printVals() const;
-    // Return a logical element or throw std::out_of_range. Negative values are data.
     int get(std::size_t index) const;
 };
 

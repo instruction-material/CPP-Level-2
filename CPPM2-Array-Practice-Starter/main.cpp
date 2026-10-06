@@ -1,16 +1,90 @@
+#include <climits>
+#include <cstddef>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
+class UnfinishedTask final : public std::logic_error {
+public:
+    using std::logic_error::logic_error;
+};
+
+// Provided boundary check. The caller still proves storage capacity and lifetime.
+void validateRange(const void* values, const int size) {
+    if (size < 0 || (size > 0 && values == nullptr)) {
+        throw std::invalid_argument("Use a nonnegative size and live storage for a nonempty range");
+    }
+}
+
+void fillPerfectSquares(int arr[], int size);
 bool firstLast(int arr[], int size);
 int sumArray(int arr[], int size);
 int sumLetters(std::string words[], int size);
 
-int main() {
-    // 1. Create and print an array containing the first 10 perfect squares (0, 1, 4, ...).
+template<class Task>
+void runTask(const char* label, Task task) {
+    try {
+        task();
+    } catch (const UnfinishedTask&) {
+        std::cout << "Learner task: " << label << " remains unfinished.\n";
+    }
 }
 
-// 2. Write a method that takes in an array of integers and its size, and returns true if the first and last elements in the array are the same, and otherwise returns false.
+int main() {
+    constexpr int count = 10;
+    // Initialized storage remains defined while the four tasks are unfinished.
+    int perfectSquares[count]{};
+    std::string words[] = {"happy", "Juni", "computer"};
+    runTask("1. perfect squares", [&] {
+        fillPerfectSquares(perfectSquares, count);
+        std::cout << "\nPerfect squares: ";
+        for (const int value : perfectSquares) std::cout << value << " ";
+        std::cout << "\n";
+    });
+    runTask("2. endpoint comparison", [&] {
+        std::cout << "First and last are the same? " << firstLast(perfectSquares, count) << "\n";
+    });
+    runTask("3. integer sum", [&] {
+        std::cout << "Sum: " << sumArray(perfectSquares, count) << "\n";
+    });
+    runTask("4. string byte count", [&] {
+        std::cout << "Total letters: " << sumLetters(words, 3) << "\n";
+    });
+    return 0;
+}
 
-// 3. Write a method that takes in an array of integers and its size and returns the sum of the integers in the array.
+// TASK fillPerfectSquares
+void fillPerfectSquares(int arr[], const int size) {
+    // TODO: implement the task and its full range contract.
+    (void)arr;
+    (void)size;
+    throw UnfinishedTask("fillPerfectSquares");
+}
+// END TASK fillPerfectSquares
 
-// 4. Write a method that takes in an array of strings and returns the total number of letters of all the strings.
+// TASK firstLast
+bool firstLast(int arr[], const int size) {
+    // TODO: implement the task and its full range contract.
+    (void)arr;
+    (void)size;
+    throw UnfinishedTask("firstLast");
+}
+// END TASK firstLast
+
+// TASK sumArray
+int sumArray(int arr[], const int size) {
+    // TODO: implement the task and its full range contract.
+    (void)arr;
+    (void)size;
+    throw UnfinishedTask("sumArray");
+}
+// END TASK sumArray
+
+// TASK sumLetters
+int sumLetters(std::string words[], const int size) {
+    // TODO: implement the task and its full range contract.
+    (void)words;
+    (void)size;
+    throw UnfinishedTask("sumLetters");
+}
+// END TASK sumLetters

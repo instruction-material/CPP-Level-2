@@ -1,38 +1,33 @@
+#include <cstddef>
 #include <iostream>
 
 int main() {
     constexpr int mySize = 20;
-    int arr1[mySize];
+    int arr1[mySize]{};
+    for (int i = 0; i < mySize; ++i) arr1[i] = i;
 
-    // load values into arr1
-    for (int i = 0; i < mySize; ++i) {
-        arr1[i] = i;
-    }
-
-    // –––– demonstrate pointer arithmetic –––
-    // Setting a pointer equal to arr1 so that we can play around
     int* p1 = arr1;
+    std::cout << "*p1 is originally equal to:\n" << *p1 << "\n";
+    const int index = 4;
+    std::cout << "\nPrinting out the items at index 4:\n"
+              << *(p1 + index) << "\n" << arr1[index] << "\n";
+    std::cout << "\nPrinting out *(++p1):\n" << *(++p1) << "\n";
+    std::cout << "Now p1 is equal to:\n" << *p1 << "\n";
+    const std::ptrdiff_t currentOffset = p1 - arr1;
+    std::cout << "Current offset: " << currentOffset << "\n";
 
-    std::cout << "*p1 is originally equal to: " << std::endl;
-    std::cout << *p1 << std::endl;
+    // One-past belongs to the same array's arithmetic range, but is not an element.
+    int* const end = arr1 + mySize;
+    std::cout << "One-past offset (not dereferenced): " << end - arr1 << "\n";
+    std::cout << "Values by traversal: ";
+    for (int* cursor = arr1; cursor != end; ++cursor) std::cout << *cursor << " ";
+    std::cout << "\n";
 
-    // This prints out the location at index 4: both of these do the same thing
-    int index = 4;
-    std::cout << "\nPrinting out the items at index 4: " << std::endl;
-    std::cout << *(p1 + index) << std::endl;
-    std::cout << arr1[index] << std::endl;
-
-    // preincrements the value, then dereferences the value at the incremented place
-    std::cout << "\nPrinting out *(++p1):" << std::endl;
-    std::cout << *(++p1) << std::endl;
-    std::cout << "Now p1 is equal to:" << std::endl;
-    std::cout << *(p1) << std::endl;
-
-    // This prints out the location at index 21: THIS IS A BAD THING! We don't know what memory exists out there past what we allocated ...
-    std::cout << "\nUh oh! We're trying to access some index that doesn't "
-                 "belong to us!"
-              << std::endl;
-    index = 21;
-    std::cout << *(p1 + index) << std::endl;
-    std::cout << arr1[index] << std::endl;
+    /* Disabled original counterexamples. Predict the validity failure first.
+       After ++p1, p1 is at offset 1. p1 + 21 would attempt offset 22:
+       forming that pointer is already outside this 20-element array's range.
+       std::cout << *(p1 + 21) << std::endl;
+       std::cout << arr1[21] << std::endl; // Index 21 is not in [0, 20).
+       Do not form or dereference either expression in an ordinary run.
+    */
 }

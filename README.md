@@ -38,3 +38,17 @@ Run `python3 verify-pointer-projects.py` from this repository root to verify the
 four independent Make workflows, five CMake targets, strict C++20 compilation,
 sanitizer-clean normal runs, explicit null/dangling diagnoses, and practice edge
 cases. This scoped gate does not certify the remaining CPPM2-CPPM5 projects.
+
+## CPPM2 array workflows
+
+The two worked lessons and the required Array Practice learner/reference packs
+have independent strict C++20 Make workflows and full neutral briefs. Practice
+retains the four original tasks, sample squares starting at zero, and three
+public observer signatures. Empty, invalid, and unrepresentable ranges have
+explicit contracts. The arithmetic reference keeps its original invalid
+expressions disabled and uses one-past only as a traversal boundary.
+
+Run `python3 verify-array-projects.py` for the four Make workflows, four CMake
+targets, completed learner fixtures, logical-prefix and mutation checks,
+sanitizer-clean lesson runs, and native array cases. This gate does not certify
+Tic Tac Toe or the remaining CPPM3-CPPM5 projects.

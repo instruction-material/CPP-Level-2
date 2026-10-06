@@ -70,3 +70,12 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
         target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endforeach()
 endif()
+
+# Optional CPPM2 integration game: independent learner and reference targets.
+add_executable(CPPM2_Tic_Tac_Toe_Starter CPPM2-Tic-Tac-Toe-Starter/main.cpp)
+add_executable(CPPM2_Tic_Tac_Toe_Reference CPPM2-Tic-Tac-Toe/main.cpp)
+set_target_properties(CPPM2_Tic_Tac_Toe_Starter CPPM2_Tic_Tac_Toe_Reference PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+    target_compile_options(CPPM2_Tic_Tac_Toe_Starter PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    target_compile_options(CPPM2_Tic_Tac_Toe_Reference PRIVATE -Wall -Wextra -Wpedantic -Werror)
+endif()

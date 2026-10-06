@@ -63,63 +63,23 @@ int main() {
 
 // TASK applyMove
 bool applyMove(const int choice, const char mark) {
-    if (choice < 1 || choice > 9 || (mark != 'X' && mark != 'O')) return false;
-    if (checkwin() != -1 || square[choice] != static_cast<char>('0' + choice)) return false;
-    square[choice] = mark;
-    return true;
+    // TODO: implement the described flat-board task.
+    (void)choice;
+    (void)mark;
+    throw UnfinishedTask("applyMove");
 }
 // END TASK applyMove
 
 // TASK checkwin
 int checkwin() {
-    if (square[1] == square[2] && square[2] == square[3])
-        return 1;
-    else if (square[4] == square[5] && square[5] == square[6])
-        return 1;
-    else if (square[7] == square[8] && square[8] == square[9])
-        return 1;
-    else if (square[1] == square[4] && square[4] == square[7])
-        return 1;
-    else if (square[2] == square[5] && square[5] == square[8])
-        return 1;
-    else if (square[3] == square[6] && square[6] == square[9])
-        return 1;
-    else if (square[1] == square[5] && square[5] == square[9])
-        return 1;
-    else if (square[3] == square[5] && square[5] == square[7])
-        return 1;
-    else if (square[1] != '1' && square[2] != '2' && square[3] != '3' &&
-             square[4] != '4' && square[5] != '5' && square[6] != '6' &&
-             square[7] != '7' && square[8] != '8' && square[9] != '9')
-        return 0;
-    else
-        return -1;
+    // TODO: implement the described flat-board task.
+    throw UnfinishedTask("checkwin");
 }
 // END TASK checkwin
 
 // TASK board
 void board() {
-    std::cout << "\n\n\tTic Tac Toe\n\n";
-
-    std::cout << "Player 1 (X)  -  Player 2 (O)" << std::endl << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "     |     |     " << std::endl;
-    std::cout << "  " << square[1] << "  |  " << square[2] << "  |  "
-              << square[3] << std::endl;
-
-    std::cout << "_____|_____|_____" << std::endl;
-    std::cout << "     |     |     " << std::endl;
-
-    std::cout << "  " << square[4] << "  |  " << square[5] << "  |  "
-              << square[6] << std::endl;
-
-    std::cout << "_____|_____|_____" << std::endl;
-    std::cout << "     |     |     " << std::endl;
-
-    std::cout << "  " << square[7] << "  |  " << square[8] << "  |  "
-              << square[9] << std::endl;
-
-    std::cout << "     |     |     " << std::endl << std::endl;
+    // TODO: implement the described flat-board task.
+    throw UnfinishedTask("board");
 }
 // END TASK board

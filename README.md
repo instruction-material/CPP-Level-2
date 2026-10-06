@@ -52,3 +52,11 @@ Run `python3 verify-array-projects.py` for the four Make workflows, four CMake
 targets, completed learner fixtures, logical-prefix and mutation checks,
 sanitizer-clean lesson runs, and native array cases. This gate does not certify
 Tic Tac Toe or the remaining CPPM3-CPPM5 projects.
+
+## Optional CPPM2 Tic Tac Toe integration
+
+The separate learner and reference packs retain the original flat board and
+checkwin/board interfaces. Three task bodies, full input/turn/end-state contracts,
+whole-line parsing, clean EOF, and strict native workflows make the integration
+project usable without exposing the completed solution as its starter.
+Run `python3 verify-tictactoe-project.py` for its scoped native gate.

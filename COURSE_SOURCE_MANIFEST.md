@@ -43,7 +43,7 @@ Canonical source repository: `CPP-Level-2`
 - Top-level folders: 21
 - Active linked folders: 21
 - Ledgered inactive/support folders: 0
-- Source-like files: 38
+- Source-like files: 49
 
 ## Scoped source review
 
@@ -52,3 +52,10 @@ complete native-workflow brief. Its paired original question starter is
 unchanged. Strict compilation, address/value traces, both Make targets and
 sanitizer checks cover that one lesson; the inventory gate alone does not
 certify every linked project or the broader course audit.
+
+Both CPPM0 projects now have full briefs and separate nested learner/reference
+packs. The lifetime starter is a runnable prediction exercise; the ownership
+starter requires selection logic. Original parent files remain references.
+Run `python3 verify-lifetime-projects.py` for their scoped Make/CMake workflows,
+selection edge cases, address/value traces and sanitizers. This does not
+certify the remaining manual-memory projects.

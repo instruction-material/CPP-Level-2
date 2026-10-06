@@ -57,3 +57,8 @@ int main() {
 
     return 0;
 }
+
+// TODO 1: Predict caller/copy values and alias relationships before running.
+// TODO 2: Predict reference mutation and the const observer result.
+// TODO 3: Draw returned-value lifetime and permitted address relationships.
+// TODO 4: Explain the effect of disabling named return value optimization.

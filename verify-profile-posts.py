@@ -164,6 +164,7 @@ int main() {
     for (int i = 0; i < 5; ++i) values.push_back({std::string(90, 'a' + i), i * 3});
     const Post extra{std::string(90, 'x'), 9};
     const std::vector<Post> old{{std::string(90, 'z'), 42}};
+    const std::vector<Post> shortValues{{"a", 1}, {"b", 2}, {"c", 3}};
     { Profile warm; fill(warm, old); expect(warm, old); }
     const int baseline = live, baselineArrays = liveArrays;
     {
@@ -213,7 +214,6 @@ int main() {
           profile.removePost(std::numeric_limits<std::size_t>::max()); }
         expect(profile, {{"maximum", std::numeric_limits<int>::max()}, {"one", 1}});
     }
-    const std::vector<Post> shortValues{{"a", 1}, {"b", 2}, {"c", 3}};
     for (std::size_t removed = 0; removed < 3; ++removed) {
         Profile profile; fill(profile, shortValues); profile.removePost(removed);
         auto after = shortValues; after.erase(after.begin() + static_cast<std::ptrdiff_t>(removed));

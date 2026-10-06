@@ -1,4 +1,4 @@
-"""Native source gates for the five CPPM3 lesson, learner and reference packs."""
+"""Native source gates for the seven CPPM3 lesson, learner and reference packs."""
 from datetime import datetime, timezone
 import importlib.util
 import json
@@ -18,7 +18,8 @@ spec.loader.exec_module(runtime)
 run, FLAGS, SANITIZERS = runtime.run, runtime.FLAGS, runtime.SANITIZERS
 FOLDERS = ['CPPM3-Two-Dimensional-Arrays-Reference', 'CPPM3-2D-Array-Practice',
            'CPPM3-2D-Array-Practice-Starter', 'CPPM3-Bank-Transactions',
-           'CPPM3-Bank-Transactions-Starter']
+           'CPPM3-Bank-Transactions-Starter',
+           'CPPM3-2D-Array-Extension', 'CPPM3-2D-Array-Extension-Starter']
 
 
 def input_run(binary, cwd, text='', expected=0):
@@ -295,6 +296,110 @@ int main() {
 '''
 
 
+EXTENSION_CASES = r'''
+#undef main
+#include <array>
+#include <cassert>
+#include <cmath>
+#include <climits>
+template<class Exception, class Call> void rejected(Call call) {
+    bool caught = false;
+    try { call(); } catch (const Exception&) { caught = true; }
+    assert(caught);
+}
+int main() {
+    assert(columnAverages(nullptr, 3, 0) == nullptr);
+    assert(columnAverages(nullptr, 0, 0) == nullptr);
+    rejected<std::invalid_argument>([] { (void)columnAverages(nullptr, 0, 3); });
+    rejected<std::out_of_range>([] { (void)checkedCell(nullptr, 0, 3, 0, 0); });
+    rejected<std::invalid_argument>([] { (void)checkedCell(nullptr, 1, 1, 0, 0); });
+    rejected<std::invalid_argument>([] { (void)columnAverages(nullptr, 1, 1); });
+    int storage[9]{};
+    for (const auto shape : {std::array<int, 2>{-1, 3}, {3, -1}, {-1, 0}, {0, -1}}) {
+        rejected<std::invalid_argument>([&] { (void)columnAverages(storage, shape[0], shape[1]); });
+        rejected<std::invalid_argument>([&] { (void)checkedCell(storage, shape[0], shape[1], 0, 0); });
+    }
+    std::size_t cases = 0, coordinates = 0;
+    for (int rows = 1; rows <= 3; ++rows) for (int cols = 1; cols <= 3; ++cols) {
+        const int count = rows * cols;
+        if (count > 6) continue;
+        int combinations = 1;
+        for (int i = 0; i < count; ++i) combinations *= 3;
+        for (int code = 0; code < combinations; ++code) {
+            std::array<int, 9> grid{};
+            grid.fill(77);
+            int digits = code;
+            for (int i = 0; i < count; ++i) { grid[static_cast<std::size_t>(i)] = digits % 3 - 1; digits /= 3; }
+            const auto before = grid;
+            int cursor = 0;
+            for (int row = 0; row < rows; ++row) for (int col = 0; col < cols; ++col) {
+                assert(checkedCell(grid.data(), rows, cols, row, col) == before[static_cast<std::size_t>(cursor++)]);
+                ++coordinates;
+            }
+            for (const auto coordinate : {std::array<int, 2>{-1, 0}, {0, -1}, {rows, 0}, {0, cols}, {INT_MAX, INT_MAX}}) {
+                rejected<std::out_of_range>([&] { (void)checkedCell(grid.data(), rows, cols, coordinate[0], coordinate[1]); });
+            }
+            double* averages = columnAverages(grid.data(), rows, cols);
+            for (int col = 0; col < cols; ++col) {
+                int expected = 0;
+                for (int index = col; index < count; index += cols) expected += before[static_cast<std::size_t>(index)];
+                assert(std::abs(averages[col] - static_cast<double>(expected) / rows) < 1e-12);
+            }
+            delete[] averages;
+            assert(grid == before);
+            ++cases;
+        }
+    }
+    assert(cases == 1614);
+    int fractional[] = {1, 2};
+    double* result = columnAverages(fractional, 2, 1);
+    assert(result[0] == 1.5);
+    delete[] result;
+    int limits[] = {INT_MAX, INT_MIN};
+    result = columnAverages(limits, 2, 1);
+    assert(result[0] == -0.5);
+    delete[] result;
+    std::cout << "Verified " << cases << " extension rectangles, " << coordinates << " valid coordinates, rejected boundaries and preserved inputs.\n";
+}
+'''
+
+EXTENSION_ALLOCATION_CASES = r'''
+#undef main
+#include <cassert>
+#include <cstdlib>
+#include <new>
+int failAfter = -1;
+int liveArrays = 0;
+void* operator new[](const std::size_t bytes) {
+    if (failAfter == 0) throw std::bad_alloc();
+    if (failAfter > 0) --failAfter;
+    void* memory = std::malloc(bytes == 0 ? 1 : bytes);
+    if (memory == nullptr) throw std::bad_alloc();
+    ++liveArrays;
+    return memory;
+}
+void operator delete[](void* memory) noexcept {
+    if (memory != nullptr) { --liveArrays; std::free(memory); }
+}
+void operator delete[](void* memory, std::size_t) noexcept { ::operator delete[](memory); }
+int main() {
+    const int baseline = liveArrays;
+    const int grid[] = {2, -1, 8, 4, 5, 10};
+    failAfter = 0;
+    bool caught = false;
+    try { (void)columnAverages(grid, 2, 3); } catch (const std::bad_alloc&) { caught = true; }
+    assert(caught && liveArrays == baseline);
+    assert(columnAverages(nullptr, 3, 0) == nullptr && liveArrays == baseline);
+    failAfter = -1;
+    double* result = columnAverages(grid, 2, 3);
+    assert(liveArrays == baseline + 1);
+    delete[] result;
+    assert(liveArrays == baseline);
+    assert(providedMain() == 0 && liveArrays == baseline);
+    std::cout << "Verified column-result allocation failure and extension driver cleanup.\n";
+}
+'''
+
 class TwoDimensionalArrays(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -313,8 +418,8 @@ class TwoDimensionalArrays(unittest.TestCase):
         run(['clang++', *FLAGS, *SANITIZERS, 'main.cpp', '-o', str(binary)], folder)
         return binary, folder
 
-    def test_roles_and_five_make_workflows(self):
-        for reference, count in [(FOLDERS[1], 4), (FOLDERS[3], 3)]:
+    def test_roles_and_seven_make_workflows(self):
+        for reference, count in [(FOLDERS[1], 4), (FOLDERS[3], 3), (FOLDERS[5], 2)]:
             starter = reference + '-Starter'
             self.assertEqual((ROOT / reference / 'README.md').read_bytes(), (ROOT / starter / 'README.md').read_bytes())
             self.assertTrue((ROOT / reference / 'REFLECTION.md').is_file())
@@ -332,7 +437,7 @@ class TwoDimensionalArrays(unittest.TestCase):
             debug = input_run(target / 'main-debug', target)
             self.assertEqual(normal, debug)
             if folder.endswith('Starter'):
-                self.assertEqual(normal.count('Learner task:'), 4 if 'Practice' in folder else 3)
+                self.assertEqual(normal.count('Learner task:'), 4 if 'Practice' in folder else (2 if 'Extension' in folder else 3))
                 self.assertNotIn('Enter a fictional name:', normal)
             elif 'Practice' in folder:
                 self.assertIn('Sum: 36\nMin: 0\n', normal)
@@ -340,6 +445,8 @@ class TwoDimensionalArrays(unittest.TestCase):
             elif 'Bank' in folder:
                 self.assertEqual(normal.count('Input ended;'), 1)
                 self.assertNotIn('TRANSACTION NO:', normal)
+            elif 'Extension' in folder:
+                self.assertEqual(normal, 'Cell (1, 2): 10\nColumn averages: 3 2 9 \n')
             else:
                 self.assertIn('Number of rows: 10\nNumber of cols: 10\nNumber of elements: 100\nExample value from arr2: 5\n42\n', normal)
                 self.assertTrue(normal.endswith('A real flat rectangular grid:\n1 2 3 \n4 5 6 \n'))
@@ -394,10 +501,26 @@ class TwoDimensionalArrays(unittest.TestCase):
             failed, failed_cwd = self.compile(failure, role + '-read-error')
             input_run(failed, failed_cwd, expected=1)
 
-    def test_five_independent_cmake_targets(self):
+    def test_extension_coordinate_and_column_contracts(self):
+        tasks = ['checkedCell', 'columnAverages']
+        for role, source in [('reference', (ROOT / FOLDERS[5] / 'main.cpp').read_text()), ('completed-learner', completed_learner(FOLDERS[5], tasks))]:
+            binary, cwd = self.compile('#define main providedMain\n' + source + EXTENSION_CASES, role + '-extension-cases')
+            output = input_run(binary, cwd)
+            self.assertIn('1614 extension rectangles', output)
+            print(json.dumps({'event': 'verified-cppm3-extension', 'role': role, 'kind': 'coordinates', 'result': output.strip()}), flush=True)
+
+    def test_extension_allocation_failure_and_cleanup(self):
+        tasks = ['checkedCell', 'columnAverages']
+        for role, source in [('reference', (ROOT / FOLDERS[5] / 'main.cpp').read_text()), ('completed-learner', completed_learner(FOLDERS[5], tasks))]:
+            binary, cwd = self.compile('#define main providedMain\n' + source + EXTENSION_ALLOCATION_CASES, role + '-extension-allocation')
+            output = input_run(binary, cwd)
+            self.assertIn('Verified column-result allocation failure', output)
+            print(json.dumps({'event': 'verified-cppm3-extension', 'role': role, 'kind': 'allocations', 'result': output.splitlines()[-1]}), flush=True)
+
+    def test_seven_independent_cmake_targets(self):
         build = self.work / 'cmake'
         run(['cmake', '-S', str(ROOT), '-B', str(build), '-DCMAKE_CXX_COMPILER=clang++'], self.work)
-        targets = ['CPPM3_Two_Dimensional_Arrays', 'CPPM3_Array_Practice_Starter', 'CPPM3_Array_Practice_Reference', 'CPPM3_Bank_Starter', 'CPPM3_Bank_Reference']
+        targets = ['CPPM3_Two_Dimensional_Arrays', 'CPPM3_Array_Practice_Starter', 'CPPM3_Array_Practice_Reference', 'CPPM3_Bank_Starter', 'CPPM3_Bank_Reference', 'CPPM3_Extension_Starter', 'CPPM3_Extension_Reference']
         run(['cmake', '--build', str(build), '--target', *targets, '--parallel', '1'], self.work, timeout=120)
         for target in targets:
             input_run(build / target, self.work)

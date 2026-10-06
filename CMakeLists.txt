@@ -93,3 +93,12 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
         target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endforeach()
 endif()
+
+# Optional coordinate/column extension has its own learner and reference packs.
+add_executable(CPPM3_Extension_Starter CPPM3-2D-Array-Extension-Starter/main.cpp)
+add_executable(CPPM3_Extension_Reference CPPM3-2D-Array-Extension/main.cpp)
+set_target_properties(CPPM3_Extension_Starter CPPM3_Extension_Reference PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+    target_compile_options(CPPM3_Extension_Starter PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    target_compile_options(CPPM3_Extension_Reference PRIVATE -Wall -Wextra -Wpedantic -Werror)
+endif()

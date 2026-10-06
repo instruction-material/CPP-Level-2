@@ -72,8 +72,13 @@ with a separate `CPPM3-Bank-Transactions-Starter`. Both paired briefs contain
 complete contracts, staged hints, self-checks, native commands and ownership or
 partial-state evidence. Completed reference reflection remains separate.
 
-Run `python3 verify-2d-array-projects.py` for the five strict Make workflows,
-five independent CMake targets, completed learner fixtures, rectangular and
+Run `python3 verify-2d-array-projects.py` for the seven strict Make workflows,
+seven independent CMake targets, completed learner fixtures, rectangular and
 integer boundary cases, allocation-failure cleanup, ledger mutation/input/EOF
 cases and sanitizer runs. The inventory gate and these scoped checks do not
 certify the remaining CPPM4–CPPM5 source, catalog imports or production state.
+
+The optional `CPPM3-2D-Array-Extension-Starter` and matching reference add two
+new tasks after practice: checked coordinate access and column averages. They
+have their own project identity, full brief and native gate coverage so the
+extension challenge has a concrete purpose and matching source material.

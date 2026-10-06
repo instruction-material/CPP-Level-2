@@ -34,6 +34,8 @@ is delivered separately from the source checks.
 | `CPPM2-Pointer-Arithmetic-Reference` |
 | `CPPM2-Tic-Tac-Toe` |
 | `CPPM2-Tic-Tac-Toe-Starter` |
+| `CPPM3-2D-Array-Extension` |
+| `CPPM3-2D-Array-Extension-Starter` |
 | `CPPM3-2D-Array-Practice` |
 | `CPPM3-2D-Array-Practice-Starter` |
 | `CPPM3-Bank-Transactions` |
@@ -49,8 +51,8 @@ is delivered separately from the source checks.
 
 ## Source Inventory
 
-- Top-level source pack folders: 26
-- Source-like files: 79
+- Top-level source pack folders: 28
+- Source-like files: 84
 
 ## Scoped source review
 
@@ -67,10 +69,13 @@ Run `python3 verify-lifetime-projects.py` for their scoped Make/CMake workflows,
 selection edge cases, address/value traces and sanitizers. This does not
 certify the remaining manual-memory projects.
 
-The five CPPM3 packs now have full briefs and independent C++20 Make/CMake
+The seven CPPM3 packs now have full briefs and independent C++20 Make/CMake
 workflows. Required 2D Array Practice and optional Bank Transactions have
 separate unfinished starter folders. Run `python3 verify-2d-array-projects.py`
 for rectangular-grid, fractional-average, integer-limit, partial-allocation,
 ledger-input and mutation checks. Typed nested-row boundaries and genuine flat
 storage are distinct. These scoped checks do not certify CPPM4–CPPM5 packs or
 the matching catalog/browser delivery.
+
+The optional extension has separate learner/reference packs for checked cell
+access and column averages, covered by the same scoped native gate.

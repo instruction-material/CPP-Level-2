@@ -50,3 +50,10 @@ add_executable(CPPM0_Lifetime_Reference CPPM0-Lifetime-Tracing-Warm-Up/solution/
 add_executable(CPPM0_Ownership_Starter CPPM0-Ownership-Boundary-Debugging/starter/main.cpp)
 add_executable(CPPM0_Ownership_Reference CPPM0-Ownership-Boundary-Debugging/solution/main.cpp)
 set_target_properties(CPPM0_Lifetime_Tracing_Warm_Up CPPM0_Ownership_Boundary_Debugging CPPM0_Lifetime_Starter CPPM0_Lifetime_Reference CPPM0_Ownership_Starter CPPM0_Ownership_Reference PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
+
+# CPPM1 learner and reference packs each have exactly one entry point.
+add_executable(CPPM1_Error_Starter CPPM1-Pointer-Error-Examples-Starter/main.cpp)
+add_executable(CPPM1_Error_Reference CPPM1-Pointer-Error-Examples/main.cpp)
+add_executable(CPPM1_Practice_Starter CPPM1-Pointer-Practice-Starter/main.cpp)
+add_executable(CPPM1_Practice_Reference CPPM1-Pointer-Practice/main.cpp)
+set_target_properties(CPP_Level_2 CPPM1_Error_Starter CPPM1_Error_Reference CPPM1_Practice_Starter CPPM1_Practice_Reference PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)

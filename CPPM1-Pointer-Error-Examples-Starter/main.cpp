@@ -40,41 +40,9 @@
 */
 
 void repairedExamples() {
-    // 1. Observe while the sole owner's allocation is still alive.
-    int* owner = new int(10);
-    int* observer = owner;
-    *observer = 20;
-    std::cout << "Live observer value: " << *observer << '\n';
-    delete owner;
-    owner = nullptr;
-    observer = nullptr;  // Both names are unusable as targets after cleanup.
-
-    // 2. An absent observer is a state to handle, not a target to dereference.
-    int* absent = nullptr;
-    if (absent == nullptr) std::cout << "Absent observer: no dereference\n";
-
-    // 3. Repeat the star for each pointer declaration, or use separate lines.
-    int value = 10;
-    int *first = &value, *second = &value;
-    std::cout << "Two pointer aliases: " << (first == second) << '\n';
-
-    // 4. Initialize a pointer before using it, and keep the target alive.
-    int* initialized = &value;
-    std::cout << "Initialized pointer value: " << *initialized << '\n';
-
-    // 5. Assign a value through the pointer; assign addresses to the pointer.
-    *initialized = 5;
-    std::cout << "Assigned target value: " << value << '\n';
-
-    // 6. Initialize the target before any read through an observer.
-    int target = 7;
-    int* targetObserver = &target;
-    std::cout << "Initialized target value: " << *targetObserver << '\n';
-
-    // 7. The pointed-to type matches the target's type.
-    std::string text = "potatoes";
-    const std::string* textObserver = &text;
-    std::cout << "Matched target type: " << *textObserver << '\n';
+    // TODO: Classify and correct all seven disabled counterexamples.
+    // Record type, lifetime, ownership, and the first invalid operation.
+    throw std::logic_error("Implement repairedExamples before claiming completion");
 }
 
 int main(int argc, char* argv[]) {

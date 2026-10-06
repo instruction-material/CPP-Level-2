@@ -50,52 +50,10 @@ int stopFor(const LineState state) {
 }
 
 int runGroceryMenu(GroceryList& list, std::istream& input) {
-    std::cout << "\nWelcome to your grocery list tracker!\n"
-              << "Use add, print, remove or !quit. Prices are fictional exercise data.\n";
-    std::string line;
-    while (true) {
-        std::cout << "What would you like to do? ";
-        auto state = readLine(input, line);
-        if (state != LineState::ready) return stopFor(state);
-        const std::string command(trimmed(line));
-        if (command == "!quit") return 0;
-        if (command == "print") {
-            list.printList();
-        } else if (command == "add") {
-            std::string name;
-            while (true) {
-                std::cout << "Enter the item's name [!quit exits]: ";
-                state = readLine(input, line);
-                if (state != LineState::ready) return stopFor(state);
-                if (trimmed(line) == "!quit") return 0;
-                if (!trimmed(line).empty()) { name = std::string(trimmed(line)); break; }
-                std::cout << "Enter a nonempty name.\n";
-            }
-            double price = 0;
-            while (true) {
-                std::cout << "Enter " << name << "'s fictional price [!quit exits]: ";
-                state = readLine(input, line);
-                if (state != LineState::ready) return stopFor(state);
-                if (trimmed(line) == "!quit") return 0;
-                if (parsePrice(line, price)) break;
-                std::cout << "Enter one finite nonnegative price.\n";
-            }
-            list.addItem(Grocery(name, price));
-        } else if (command == "remove") {
-            std::size_t number = 0;
-            while (true) {
-                std::cout << "Enter a one-based item number [!quit exits]: ";
-                state = readLine(input, line);
-                if (state != LineState::ready) return stopFor(state);
-                if (trimmed(line) == "!quit") return 0;
-                if (parseItemNumber(line, number)) break;
-                std::cout << "Enter one positive whole item number.\n";
-            }
-            list.removeItem(number);
-        } else {
-            std::cout << "Unknown command. Use add, print, remove or !quit.\n";
-        }
-    }
+    // TODO: implement add/print/remove/!quit with complete lines and validation.
+    // Rejected or incomplete input must not mutate the list or reuse old values.
+    (void)list; (void)input;
+    throw UnfinishedGroceryTask("Unfinished learner task: Grocery menu");
 }
 
 void seedDemonstration(GroceryList& list) {
@@ -113,6 +71,9 @@ int main() {
         GroceryList myList;
         seedDemonstration(myList);
         return runGroceryMenu(myList, std::cin);
+    } catch (const UnfinishedGroceryTask& error) {
+        std::cout << error.what() << '\n';
+        return 0;
     } catch (const std::exception& error) {
         std::cerr << "Grocery List stopped: " << error.what() << '\n';
         return 1;

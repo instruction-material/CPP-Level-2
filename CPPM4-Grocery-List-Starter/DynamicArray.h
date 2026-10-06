@@ -2,37 +2,44 @@
 #define DYNAMICARRAY_H
 
 #include <cstddef>
+#include <stdexcept>
 #include <string>
 
-// A record groups public data. The array validates drafts before accepting them.
+class UnfinishedGroceryTask final : public std::logic_error {
+public:
+    using std::logic_error::logic_error;
+};
+
 struct Grocery {
     std::string name;
     double price;
+    // Provided initialized placeholder for unused array slots.
     Grocery() : name(), price(0) {}
-    Grocery(const std::string& newName, const double newPrice)
-        : name(newName), price(newPrice) {}
+    Grocery(const std::string& newName, const double newPrice) : name(), price(0) {
+        // TODO: initialize the real record from both arguments.
+        (void)newName; (void)newPrice;
+        throw UnfinishedGroceryTask("Unfinished learner task: Grocery record constructor");
+    }
 };
 
 constexpr std::size_t DEFAULT_SIZE = 5;
-
 class DynamicArray {
 private:
-    std::size_t mySize;   // Logical, accepted records only.
-    std::size_t maxSize;  // Allocated slots, including initialized placeholders.
-    Grocery* myVals;      // Sole owner; nullptr at zero capacity.
+    std::size_t mySize;
+    std::size_t maxSize;
+    Grocery* myVals;
     void resize(std::size_t newCapacity);
 
 public:
     DynamicArray();
+    // TODO: define independent copies and allocation-free noexcept moves.
     DynamicArray(const DynamicArray& other);
     DynamicArray& operator=(const DynamicArray& other);
     DynamicArray(DynamicArray&& other) noexcept;
     DynamicArray& operator=(DynamicArray&& other) noexcept;
     ~DynamicArray();
-    // Accept named, finite nonnegative fictional prices; failure preserves data.
     void addVal(const Grocery& val);
     void printVals() const;
-    // Return an independent record copy, or throw std::out_of_range.
     Grocery accessVal(std::size_t index) const;
     std::size_t getSize() const;
 };

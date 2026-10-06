@@ -1,59 +1,64 @@
-#include <iostream>
-#include <string>
 #include "matrix.h"
 
-int main() {
-    int r1 = 0;
-    int c1 = 0;
-    int r2 = 0;
-    int c2 = 0;
-    std::string response = "";
-    while (response != "add" && response != "multiply") {
-        std::cout << "After creating your matrices, will you want to add them "
-                     "or multiply them? ";
-        std::cin >> response;
+#include <iostream>
+#include <locale>
+#include <sstream>
+#include <string>
+
+bool parseDimensions(const std::string& line, int& rows, int& cols) {
+    std::istringstream input(line);
+    input.imbue(std::locale::classic());
+    int r = 0, c = 0;
+    if (!(input >> r >> c)) return false;
+    input >> std::ws;
+    if (!input.eof() || r < 1 || c < 1 || r > MAX_MATRIX_DIMENSION || c > MAX_MATRIX_DIMENSION) return false;
+    rows = r; cols = c;
+    return true;
+}
+
+int runMatrixProgram(std::istream& input) {
+    std::string response;
+    while (true) {
+        std::cout << "After creating the matrices, add or multiply them? [!quit exits] ";
+        response = std::string(matrix_detail::trimmed(matrix_detail::line(input)));
+        if (response == "add" || response == "multiply") break;
+        std::cout << "Enter add, multiply or !quit.\n";
     }
-
-    std::cout << "Enter rows and column for first matrix: ";
-    std::cin >> r1 >> c1;
-    std::cout << "Enter rows and column for second matrix: ";
-    std::cin >> r2 >> c2;
-
-    while (response == "add" && (r1 != r2 || c1 != c2)) {
-        std::cout
-            << "Error! To add two matrices, they must have the same dimensions."
-            << std::endl;
-        std::cout << "Enter rows and column for first matrix: ";
-        std::cin >> r1 >> c1;
-        std::cout << "Enter rows and column for second matrix: ";
-        std::cin >> r2 >> c2;
+    int r1 = 0, c1 = 0, r2 = 0, c2 = 0;
+    while (true) {
+        while (true) {
+            std::cout << "Rows and columns for first matrix [1 through 20, !quit exits]: ";
+            if (parseDimensions(matrix_detail::line(input), r1, c1)) break;
+            std::cout << "Enter exactly two whole dimensions from 1 through 20.\n";
+        }
+        while (true) {
+            std::cout << "Rows and columns for second matrix [1 through 20, !quit exits]: ";
+            if (parseDimensions(matrix_detail::line(input), r2, c2)) break;
+            std::cout << "Enter exactly two whole dimensions from 1 through 20.\n";
+        }
+        if ((response == "add" && r1 == r2 && c1 == c2) || (response == "multiply" && c1 == r2)) break;
+        std::cout << (response == "add" ? "Error! Addition needs matching dimensions.\n" :
+                                           "Error! Multiplication needs first columns equal to second rows.\n");
     }
-
-    while (response == "multiply" && c1 != r2) {
-        std::cout
-            << "Error! To multiply two matrices, the number of columns of the "
-               "first matrix must match the number of rows of the second matrix"
-            << std::endl;
-        std::cout << "Enter rows and column for first matrix: ";
-        std::cin >> r1 >> c1;
-        std::cout << "Enter rows and column for second matrix: ";
-        std::cin >> r2 >> c2;
-    }
-
-    Matrix mat1(r1, c1);
-    Matrix mat2(r2, c2);
-    mat1.fillMatrix();
-    mat2.fillMatrix();
-    mat1.display();
-    mat2.display();
-
-    if (response == "add") {
-        const Matrix additionResult = mat1.add(mat2);
-        additionResult.display();
-    } else {
-        const Matrix multiplicationResult = mat1.multiply(mat2);
-        multiplicationResult.display();
-    }
-
+    Matrix first(r1, c1), second(r2, c2);
+    first.fillMatrix(input); second.fillMatrix(input);
+    first.display(); second.display();
+    const Matrix result = response == "add" ? first.add(second) : first.multiply(second);
+    result.display();
     return 0;
+}
+
+int main(const int argc, char*[]) {
+    if (argc != 1) { std::cerr << "Usage: main\n"; return 2; }
+    try {
+        return runMatrixProgram(std::cin);
+    } catch (const MatrixInputStopped&) {
+        return 0;
+    } catch (const UnfinishedMatrixTask& error) {
+        std::cout << error.what() << '\n';
+        return 0;
+    } catch (const std::exception& error) {
+        std::cerr << "Matrix stopped: " << error.what() << '\n';
+        return 1;
+    }
 }

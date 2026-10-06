@@ -80,67 +80,41 @@ int main() {
 // 1. Write a method that takes in a 2D array of integers and returns the sum of all of the integers in the array.
 // TASK sumArray
 int sumArray(int* arr, const int m, const int n) {
-    const auto count = validateGrid(arr, m, n);
-    int total = 0;
-    for (std::size_t index = 0; index < count; ++index) {
-        if ((arr[index] > 0 && total > INT_MAX - arr[index]) ||
-            (arr[index] < 0 && total < INT_MIN - arr[index])) {
-            throw std::overflow_error("An ordered prefix sum cannot be represented by int");
-        }
-        total += arr[index];
-    }
-    return total;
+    // TODO: implement this task after reading README.md.
+    (void)arr;
+    (void)m;
+    (void)n;
+    throw UnfinishedTask("sumArray");
 }
 // END TASK sumArray
 
 // 2. Write a method that takes in a 2D array of integers and returns the minimum of all of the integers in the array.
 // TASK minArray
 int minArray(int* arr, const int m, const int n) {
-    const auto count = validateGrid(arr, m, n);
-    if (count == 0) throw std::invalid_argument("An empty grid has no minimum");
-    int minimum = arr[0];
-    for (std::size_t index = 1; index < count; ++index) {
-        if (arr[index] < minimum) minimum = arr[index];
-    }
-    return minimum;
+    // TODO: implement this task after reading README.md.
+    (void)arr;
+    (void)m;
+    (void)n;
+    throw UnfinishedTask("minArray");
 }
 // END TASK minArray
 
 // 3. Write a method that takes in an integer N and returns a 2D array of the NxN multiplication table. Then, print out the array in grid format.
 // TASK multTable
 int** multTable(const int N) {
-    if (N < 0) throw std::invalid_argument("The table size cannot be negative");
-    if (N == 0) return nullptr;
-    if (N > INT_MAX / N) throw std::overflow_error("A multiplication-table cell cannot be represented by int");
-    int** table = new int*[N]{};
-    try {
-        for (int row = 0; row < N; ++row) {
-            table[row] = new int[N];
-            for (int column = 0; column < N; ++column) table[row][column] = (row + 1) * (column + 1);
-        }
-    } catch (...) {
-        deleteTable(table, N);
-        throw;
-    }
-    return table;
+    // TODO: implement this task after reading README.md.
+    (void)N;
+    throw UnfinishedTask("multTable");
 }
 // END TASK multTable
 
 // 4. Write a method that takes in a 2D array of integers and returns an array (one-dimensional) of the averages of the integers in each row. Make sure the averages are returned as doubles!
 // TASK averageArray
 double* averageArray(int* arr, const int m, const int n) {
-    (void)validateGrid(arr, m, n);
-    if (m == 0) return nullptr;
-    if (n == 0) throw std::invalid_argument("A nonempty set of rows needs at least one column");
-    double* result = new double[m];
-    for (int row = 0; row < m; ++row) {
-        long double total = 0;
-        for (int column = 0; column < n; ++column) {
-            const auto index = static_cast<std::size_t>(row) * static_cast<std::size_t>(n) + static_cast<std::size_t>(column);
-            total += static_cast<long double>(arr[index]);
-        }
-        result[row] = static_cast<double>(total / static_cast<long double>(n));
-    }
-    return result;
+    // TODO: implement this task after reading README.md.
+    (void)arr;
+    (void)m;
+    (void)n;
+    throw UnfinishedTask("averageArray");
 }
 // END TASK averageArray

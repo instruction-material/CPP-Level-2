@@ -60,3 +60,20 @@ checkwin/board interfaces. Three task bodies, full input/turn/end-state contract
 whole-line parsing, clean EOF, and strict native workflows make the integration
 project usable without exposing the completed solution as its starter.
 Run `python3 verify-tictactoe-project.py` for its scoped native gate.
+
+## CPPM3 shape and input workflows
+
+The worked two-dimensional array lesson distinguishes typed nested rows, a real
+flat rectangular array and separately allocated row pointers. Required practice
+preserves its four original tasks and sample grid, with a separate unfinished
+`CPPM3-2D-Array-Practice-Starter` and double row averages. The optional Bank
+Transactions model preserves its four-by-five grid and three transactions,
+with a separate `CPPM3-Bank-Transactions-Starter`. Both paired briefs contain
+complete contracts, staged hints, self-checks, native commands and ownership or
+partial-state evidence. Completed reference reflection remains separate.
+
+Run `python3 verify-2d-array-projects.py` for the five strict Make workflows,
+five independent CMake targets, completed learner fixtures, rectangular and
+integer boundary cases, allocation-failure cleanup, ledger mutation/input/EOF
+cases and sanitizer runs. The inventory gate and these scoped checks do not
+certify the remaining CPPM4–CPPM5 source, catalog imports or production state.

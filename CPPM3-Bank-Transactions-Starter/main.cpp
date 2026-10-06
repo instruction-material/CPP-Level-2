@@ -145,42 +145,31 @@ int main() {
 
 // TASK initializeLedger
 bool initializeLedger(int balances[][5], const int startDate, const int startingBalance) {
-    if (balances == nullptr || !isValidDate(startDate)) return false;
-    const int initial[5] = {0, startDate, startingBalance, 0, startingBalance};
-    for (int column = 0; column < 5; ++column) balances[0][column] = initial[column];
-    return true;
+    // TODO: implement this task after reading README.md.
+    (void)balances;
+    (void)startDate;
+    (void)startingBalance;
+    throw UnfinishedTask("initializeLedger");
 }
 // END TASK initializeLedger
 
 // TASK recordTransaction
 bool recordTransaction(int balances[][5], const int transactionNumber, const int date, const int amount) {
-    if (balances == nullptr || transactionNumber < 1 || transactionNumber > 3 || !isValidDate(date)) return false;
-    // The driver proves the preceding row is already initialized.
-    const int opening = balances[transactionNumber - 1][4];
-    if ((amount > 0 && opening > INT_MAX - amount) ||
-        (amount < 0 && opening < INT_MIN - amount)) return false;
-    const int next[5] = {transactionNumber, date, opening, amount, opening + amount};
-    for (int column = 0; column < 5; ++column) balances[transactionNumber][column] = next[column];
-    return true;
+    // TODO: implement this task after reading README.md.
+    (void)balances;
+    (void)transactionNumber;
+    (void)date;
+    (void)amount;
+    throw UnfinishedTask("recordTransaction");
 }
 // END TASK recordTransaction
 
 // TASK print
 void print(const int arr[][5], const int m, const int n) {
-    if (m < 0 || m > 4 || n != 5 || (m != 0 && arr == nullptr)) {
-        throw std::invalid_argument("Print initialized rows within the four-by-five ledger");
-    }
-    constexpr const char* labels[] = {"TRANSACTION NO: ", " DATE: ", " STARTING BALANCE: ", " AMOUNT: ", " ENDING BALANCE: "};
-    for (int row = 0; row < m; ++row) {
-        for (int column = 0; column < n; ++column) {
-            std::cout << "\n" << labels[column];
-            if (column == 1) {
-                const auto fill = std::cout.fill('0');
-                std::cout << std::setw(8) << arr[row][column];
-                std::cout.fill(fill);
-            } else std::cout << arr[row][column];
-        }
-        std::cout << "\n";
-    }
+    // TODO: implement this task after reading README.md.
+    (void)arr;
+    (void)m;
+    (void)n;
+    throw UnfinishedTask("print");
 }
 // END TASK print

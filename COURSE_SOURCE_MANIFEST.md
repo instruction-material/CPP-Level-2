@@ -12,14 +12,20 @@ Canonical source repository: `CPP-Level-2`
 - The verification gate checks for this manifest, the source backlog ledger, source-like files, removed Replit metadata, and any repo-specific readiness files.
 - Project-specific unit tests or build commands should still be run inside individual project folders when a project includes its own test harness.
 
-## Active Catalog Targets
+## Available source pack folders
+
+The list is an availability inventory, not a readiness certificate for every
+pack or proof of every live catalog link. New CPPM3 starter/catalog integration
+is delivered separately from the source checks.
 
 | Folder |
 | --- |
 | `CPPM0-Lifetime-Tracing-Warm-Up` |
 | `CPPM0-Ownership-Boundary-Debugging` |
 | `CPPM1-Pointer-Error-Examples` |
+| `CPPM1-Pointer-Error-Examples-Starter` |
 | `CPPM1-Pointer-Practice` |
+| `CPPM1-Pointer-Practice-Starter` |
 | `CPPM1-Pointers` |
 | `CPPM1-Pointers-Starter` |
 | `CPPM2-Array-Basics-Reference` |
@@ -27,8 +33,11 @@ Canonical source repository: `CPP-Level-2`
 | `CPPM2-Array-Practice-Starter` |
 | `CPPM2-Pointer-Arithmetic-Reference` |
 | `CPPM2-Tic-Tac-Toe` |
+| `CPPM2-Tic-Tac-Toe-Starter` |
 | `CPPM3-2D-Array-Practice` |
+| `CPPM3-2D-Array-Practice-Starter` |
 | `CPPM3-Bank-Transactions` |
+| `CPPM3-Bank-Transactions-Starter` |
 | `CPPM3-Two-Dimensional-Arrays-Reference` |
 | `CPPM4-Assembly-Line` |
 | `CPPM4-Dynamic-Array-Implementation` |
@@ -40,10 +49,8 @@ Canonical source repository: `CPP-Level-2`
 
 ## Source Inventory
 
-- Top-level folders: 21
-- Active linked folders: 21
-- Ledgered inactive/support folders: 0
-- Source-like files: 49
+- Top-level source pack folders: 26
+- Source-like files: 79
 
 ## Scoped source review
 
@@ -59,3 +66,11 @@ starter requires selection logic. Original parent files remain references.
 Run `python3 verify-lifetime-projects.py` for their scoped Make/CMake workflows,
 selection edge cases, address/value traces and sanitizers. This does not
 certify the remaining manual-memory projects.
+
+The five CPPM3 packs now have full briefs and independent C++20 Make/CMake
+workflows. Required 2D Array Practice and optional Bank Transactions have
+separate unfinished starter folders. Run `python3 verify-2d-array-projects.py`
+for rectangular-grid, fractional-average, integer-limit, partial-allocation,
+ledger-input and mutation checks. Typed nested-row boundaries and genuine flat
+storage are distinct. These scoped checks do not certify CPPM4–CPPM5 packs or
+the matching catalog/browser delivery.

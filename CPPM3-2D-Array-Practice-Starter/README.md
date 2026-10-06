@@ -126,5 +126,6 @@ Submit four completed bodies, a row/column and object-boundary diagram, a sum
 prefix trace, a fractional-average case, and a cleanup ledger for ordinary and
 failed table construction. Include rectangular, empty, null, negative, integer
 boundary and input-preservation checks, plus native build/run evidence. The
-optional extension adds a column statistic to this saved attempt; it does not
-repeat the four required calculations or reset the project.
+optional extension uses a separate project for checked coordinates and column
+means after these four calculations. The saved practice attempt remains
+available; importing the extension does not replace it.

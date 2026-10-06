@@ -86,8 +86,8 @@ Question 1 is not permission to dereference it.
 ## Native workflow
 
 The site IDE edits, saves, reopens, and exports C++; it does not compile or
-execute it. Use **Open in IDE** on the learner link, confirm the source import,
-save the attempt, and export a ZIP. Extract that pack and use a native C++20
+execute it. Open the learner link with **Open in IDE**. Confirm the source
+import, save the attempt, and export a ZIP. Extract that pack and use a native C++20
 compiler and Make. An existing saved project retains its work; import the new
 starter separately using the fresh-starter link in the course brief after saving
 the old attempt.

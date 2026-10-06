@@ -1,0 +1,33 @@
+name: Matrix Class source
+
+on:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: matrix-class-source-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Install CMake compatible with the project requirement
+        run: |
+          python3 -m venv "$RUNNER_TEMP/cppm5-matrix-tools"
+          "$RUNNER_TEMP/cppm5-matrix-tools/bin/python" -m pip install 'cmake==4.4.4'
+          echo "$RUNNER_TEMP/cppm5-matrix-tools/bin" >> "$GITHUB_PATH"
+      - name: Verify Matrix grids, arithmetic, failure cleanup and whole-line input
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          CLASSES_AUDIT_PARENT_TASK_ID: cpp-level2-cppm5-matrix-source-ci
+        run: python3 verify-matrix-class.py

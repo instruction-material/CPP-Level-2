@@ -43,3 +43,10 @@ add_executable(CPPM0_Ownership_Boundary_Debugging
 add_executable(CPPM5_Modern_Ownership_Reflection
         CPPM5-Modern-Ownership-Reflection/main.cpp
 )
+
+# Keep the CPPM0 learner/reference programs independent.
+add_executable(CPPM0_Lifetime_Starter CPPM0-Lifetime-Tracing-Warm-Up/starter/main.cpp)
+add_executable(CPPM0_Lifetime_Reference CPPM0-Lifetime-Tracing-Warm-Up/solution/main.cpp)
+add_executable(CPPM0_Ownership_Starter CPPM0-Ownership-Boundary-Debugging/starter/main.cpp)
+add_executable(CPPM0_Ownership_Reference CPPM0-Ownership-Boundary-Debugging/solution/main.cpp)
+set_target_properties(CPPM0_Lifetime_Tracing_Warm_Up CPPM0_Ownership_Boundary_Debugging CPPM0_Lifetime_Starter CPPM0_Lifetime_Reference CPPM0_Ownership_Starter CPPM0_Ownership_Reference PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)

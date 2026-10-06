@@ -29,16 +29,8 @@ const LogEntry& highestSeverity(const std::vector<LogEntry>& entries) {
     throw std::invalid_argument("highestSeverity requires a nonempty vector");
   }
 
-  // Borrow the earliest maximum; do not mutate the vector.
-  std::size_t highestIndex = 0;
-
-  for (std::size_t i = 1; i < entries.size(); ++i) {
-    if (entries[i].severity > entries[highestIndex].severity) {
-      highestIndex = i;
-    }
-  }
-
-  return entries[highestIndex];
+  // TODO: Find the earliest maximum and return that vector element.
+  throw std::logic_error("Implement highestSeverity before running selection");
 }
 
 int main() {
@@ -60,8 +52,16 @@ int main() {
 
   std::cout << "\nA const reference observes an element while that element remains valid:" << std::endl;
   // Reallocation, erasure, clearing or destruction can invalidate this borrow.
-  const LogEntry& worst = highestSeverity(entries);
-  printEntry("Highest severity entry", worst);
+  try {
+    const LogEntry& worst = highestSeverity(entries);
+    printEntry("Highest severity entry", worst);
+  } catch (const std::logic_error& error) {
+    std::cout << "Learner task: " << error.what() << std::endl;
+  }
 
   return 0;
 }
+
+// TODO 1: Predict values before and after editing a copy.
+// TODO 2: Predict the caller-owned entry after reference mutation.
+// TODO 3: Name the selected entry owner and two invalidating operations.

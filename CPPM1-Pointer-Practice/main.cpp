@@ -1,45 +1,34 @@
 #include <array>
-#include <cctype>
+#include <cstddef>
 #include <iostream>
 #include <string>
 #include <vector>
 
-// forward declaration of question 3
-void question3(const std::string& inputStr);
-
-int main() {
-
-    std::cout << "–––––––––––\n" << "Question 1:" << std::endl;
-    // size_t is an only-positive type
-    constexpr size_t mySize = 20;
-    std::array<int, mySize> arr1{};
-
-    // load values into arr1
-    for (size_t i = 0; i < mySize; ++i) {
-        arr1[i] = i;
-    }
-
+void question1(const std::array<int, 20>& arr1) {
+    constexpr std::size_t mySize = 20;
     // 1. How would we advance through an array at twice the speed using a pointer?
     // declare two pointers to point to arr1
-    int* p1 = arr1.data();
-    int* p2 = arr1.data();
+    const int* p1 = arr1.data();
+    const int* p2 = arr1.data();
 
     std::cout << "*p1 and *p2 are originally equal to: " << std::endl;
     std::cout << *p1 << " " << *p2 << std::endl;
 
-    for (size_t i = 0; i < mySize / 2; ++i) {
+    for (std::size_t i = 0; i < mySize / 2; ++i) {
         std::cout << "loop number: " << i << std::endl;
         std::cout << "p1 is: " << *(p1++) << std::endl;
         std::cout << "p2 is: " << *p2 << std::endl;
         p2 += 2;
     }
 
+    // p2 is now one-past-end; forming it is valid, dereferencing it is not.
+
     /*
   Debug 1a for student: why would this not work?
 
   int *p1 = arr1;
   int *p2 = arr1;
-  for (size_t i = 0; i < mySize / 2; ++i) {
+  for (std::size_t i = 0; i < mySize / 2; ++i) {
     std::cout << "loop number: " << i << std::endl;
     std::cout << "p1 is: " << *(p1++) << std::endl;
     std::cout << "p2 is: " << *(p2 += 2) << std::endl;
@@ -50,15 +39,15 @@ int main() {
   Debug 1b for student: why would this not work?
 
   int *p1, p2 = arr1;
-  for (size_t i = 0; i < mySize / 2; ++i) {
+  for (std::size_t i = 0; i < mySize / 2; ++i) {
     std::cout << "loop number: " << i << std::endl;
     std::cout << "p1 is: " << *(p1++) << std::endl;
     std::cout << "p2 is: " << *(p2 += 2) << std::endl;
   }
 
-  //fixed version:
-  int *p1, *p2;
-  p1 = p2 = arr1;
+  // Fixed declaration for a const array observer:
+  const int *p1, *p2;
+  p1 = p2 = arr1.data();
   */
 
     /*
@@ -66,34 +55,39 @@ int main() {
 
   int *p1, *p2;
   p1 = p2 = arr1;
-  for (size_t i = 0; i < mySize / 2; ++i) {
+  for (std::size_t i = 0; i < mySize / 2; ++i) {
     std::cout << "loop number: " << i << std::endl;
     std::cout << "p1 is: " << *(++p1) << std::endl;
     std::cout << "p2 is: " << *(p2 += 2) << std::endl;
   }
   */
+}
 
-    std::cout << "\n\n–––––––––––\n" << "Question 2:" << std::endl;
-
+void question2(const std::string& startString) {
     // 2. Generate 2 pointers that point to a reference of an array, and start one at the beginning of the array and one at the end. Print out when these pointers meet!
 
-    std::string startString = "JuniLearning";
-    const size_t stringSize = startString.size();
+    const std::size_t stringSize = startString.size();
 
-    // Debug 2a: this is DANGEROUS! Why?
+    // sizeof(chrArr) measures the vector object, not its character buffer.
     // size_t chrArrLen = sizeof(chrArr);
 
     // declare a char array of stringSize
     std::vector<char> chrArr(startString.begin(), startString.end());
     chrArr.push_back('\0');
 
+    if (startString.empty()) {
+        std::cout << "Question 2 needs a non-empty string." << std::endl;
+        return;
+    }
+
+    // The vector owns this buffer; do not resize it while these observers exist.
     // initialize our pointers
     char* chrP1 = chrArr.data();
     char* chrP2 = chrArr.data() + stringSize - 1;
 
     // Keep a count of the number of times that these pointers increased
-    int numP1 = 0;
-    int numP2 = 0;
+    std::size_t numP1 = 0;
+    std::size_t numP2 = 0;
 
     // Print out some starting information about our string and pointers
     std::cout << "Starting string: " << chrArr.data() << std::endl;
@@ -128,28 +122,12 @@ int main() {
     chrP2--;
   }
   */
-
-    // QUESTION 3:
-    // Write a special pointer that advances its position only by the value of the integer held in the string: for example, “1hello” should only advance to h. “3hello” should advance to the first “l”. However “12e4woah” should advance to the final “h”. If the character the special pointer is pointing at is not a number, then the first pointer should not advance.
-
-    std::cout << "\n\n–––––––––––\n" << "Question 3:" << std::endl;
-
-    // Example 1
-    std::string question3a = "1hello";
-    question3(question3a);
-    std::cout << "\n–––––––––––\n" << std::endl;
-
-    // Example 2
-    std::string question3b = "3hello";
-    question3(question3b);
-    std::cout << "\n–––––––––––\n" << std::endl;
-
-    // Example 3
-    std::string question3c = "12e4woah";
-    question3(question3c);
 }
 
-// implementatino of question 3
+// Two cursors: the scanner visits each character once; digits move the result.
+// Non-digits leave the result unchanged but do not stop the scanner. Each digit
+// is separate, including zero. Stop before a result could become one-past-end.
+// The borrowed string stays alive and unchanged for the duration of this call.
 void question3(const std::string& inputStr) {
     if (inputStr.empty()) {
         std::cout << "Question 3 needs a non-empty string." << std::endl;
@@ -161,25 +139,25 @@ void question3(const std::string& inputStr) {
 
     // EASIER IMPLEMENTATION WITH INTEGER INDEX POINTER
     // this end index will keep track of the index where we end up
-    size_t end = 0;
+    std::size_t end = 0;
 
     // iterate through the string using i to look through the string, and only changing end if the character i is looking at is a digit or not
-    for (size_t i = 0; i < inputStr.length(); ++i) {
+    for (std::size_t i = 0; i < inputStr.length(); ++i) {
         std::cout << "Now looking at character " << inputStr[i] << std::endl;
         // if this character is a digit, then advance end pointer
-        if (std::isdigit(static_cast<unsigned char>(inputStr[i]))) {
+        if (inputStr[i] >= '0' && inputStr[i] <= '9') {
             std::cout << "We encountered a digit, " << inputStr[i] << std::endl;
             // converts the increment to its numeric value
-            const size_t increment = static_cast<size_t>(inputStr[i] - '0');
+            const std::size_t increment = static_cast<std::size_t>(inputStr[i] - '0');
 
             // only advance end if it will not surpass the end of the length of our string
-            if (end + increment < inputStr.length()) {
+            if (increment < inputStr.length() - end) {
                 end += increment;
-                std::cout << "We incremented i by: " << increment
+                std::cout << "We incremented end by: " << increment
                           << ", putting our end pointer pointing to: "
                           << inputStr[end] << std::endl;
             } else {
-                std::cout << "The increment would have passed the end of the "
+                std::cout << "The increment would reach or pass the end of the "
                              "string, we're done!"
                           << std::endl;
                 break;
@@ -200,15 +178,15 @@ void question3(const std::string& inputStr) {
 
     // create a char pointer to the address of the first character in the string
     const char* specAdvPtr = inputStr.c_str();
-    size_t pointerOffset = 0;
+    std::size_t pointerOffset = 0;
     std::cout << "The pointer starts at: " << *specAdvPtr << std::endl;
-    for (size_t i = 0; i < inputStr.length(); ++i) {
+    for (std::size_t i = 0; i < inputStr.length(); ++i) {
         std::cout << "Now looking at character " << inputStr[i] << std::endl;
-        if (std::isdigit(static_cast<unsigned char>(inputStr[i]))) {
-            // to get the specific digit value, we need to cast it to a character
-            const size_t increment = static_cast<size_t>(inputStr[i] - '0');
+        if (inputStr[i] >= '0' && inputStr[i] <= '9') {
+            // Convert this individual ASCII digit to its integer value.
+            const std::size_t increment = static_cast<std::size_t>(inputStr[i] - '0');
 
-            if (pointerOffset + increment < inputStr.length()) {
+            if (increment < inputStr.length() - pointerOffset) {
                 pointerOffset += increment;
                 specAdvPtr += increment;
                 std::cout << "The pointer increased by " << increment
@@ -217,7 +195,7 @@ void question3(const std::string& inputStr) {
                     << "The value of where the pointer is pointing at now: "
                     << *specAdvPtr << std::endl;
             } else {
-                std::cout << "The increment would have passed the end of the "
+                std::cout << "The increment would reach or pass the end of the "
                              "string, we're done!"
                           << std::endl;
                 break;
@@ -227,5 +205,23 @@ void question3(const std::string& inputStr) {
 
     // print out information about the end location of the second pointer
     std::cout << "The final location of the end pointer was pointing to: "
-              << *specAdvPtr << std::endl;
+              << *specAdvPtr << ", after advancing " << pointerOffset
+              << " characters." << std::endl;
+}
+
+int main() {
+    // std::size_t is an unsigned size type; zero is a valid value.
+    std::array<int, 20> arr1{};
+    for (std::size_t i = 0; i < arr1.size(); ++i) {
+        arr1[i] = static_cast<int>(i);
+    }
+    std::cout << "Question 1:" << std::endl;
+    question1(arr1);
+    std::cout << "\nQuestion 2:" << std::endl;
+    question2("JuniLearning");
+    std::cout << "\nQuestion 3:" << std::endl;
+    question3("1hello");
+    question3("3hello");
+    question3("12e4woah");
+    return 0;
 }
